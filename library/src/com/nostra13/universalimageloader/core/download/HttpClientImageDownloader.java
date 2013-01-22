@@ -30,7 +30,7 @@ public class HttpClientImageDownloader extends ImageDownloader {
 		httpRequest.setHeader(
 				"Authorization",
 				"basic "
-						+ Base64.encodeBytes((userName + passWord)
+						+ Base64.encodeBytes((userName + ":" + passWord)
 								.getBytes()));
 		}
 		HttpResponse response = httpClient.execute(httpRequest);

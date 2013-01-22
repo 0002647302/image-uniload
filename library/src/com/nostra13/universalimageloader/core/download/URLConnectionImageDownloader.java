@@ -44,7 +44,7 @@ public class URLConnectionImageDownloader extends ImageDownloader {
 		conn.setRequestProperty(
 				"Authorization",
 				"basic "
-						+ Base64.encodeBytes((userName + passWord)
+						+ Base64.encodeBytes((userName + ":" + passWord)
 								.getBytes()));
 		}
 		conn.setConnectTimeout(connectTimeout);
