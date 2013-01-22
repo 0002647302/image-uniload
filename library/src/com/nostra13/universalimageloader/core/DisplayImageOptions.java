@@ -43,7 +43,7 @@ public final class DisplayImageOptions {
 	private final int delayBeforeLoading;
 	private final BitmapDisplayer displayer;
 	
-	final String useragent;
+	final String userAgent;
 	final String username;
 	final String password;
 
@@ -57,7 +57,7 @@ public final class DisplayImageOptions {
 		bitmapConfig = builder.bitmapConfig;
 		delayBeforeLoading = builder.delayBeforeLoading;
 		displayer = builder.displayer;
-		useragent = builder.useragent;
+		userAgent = builder.userAgent;
 		username = builder.username;
 		password = builder.password;
 	}
@@ -109,6 +109,18 @@ public final class DisplayImageOptions {
 	BitmapDisplayer getDisplayer() {
 		return displayer;
 	}
+	
+	String getUserAgent() {
+		return userAgent;
+	}
+	
+	String getUsername() {
+		return username;
+	}
+	
+	String getPassword() {
+		return password;
+	}
 
 	/**
 	 * Builder for {@link DisplayImageOptions}
@@ -126,7 +138,7 @@ public final class DisplayImageOptions {
 		private int delayBeforeLoading = 0;
 		private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
 
-		private String useragent = null;
+		private String userAgent = null;
 		private String username = null;
 		private String password = null;
 		
@@ -198,6 +210,21 @@ public final class DisplayImageOptions {
 			this.displayer = displayer;
 			return this;
 		}
+		
+		public Builder userAgent(String userAgent) {
+			this.userAgent = userAgent;
+			return this;
+		}
+		
+		public Builder username(String username) {
+			this.username = username;
+			return this;
+		}
+		
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
 
 		/** Sets all options equal to incoming options */
 		public Builder cloneFrom(DisplayImageOptions options) {
@@ -210,6 +237,9 @@ public final class DisplayImageOptions {
 			bitmapConfig = options.bitmapConfig;
 			delayBeforeLoading = options.delayBeforeLoading;
 			displayer = options.displayer;
+			userAgent = options.userAgent;
+			username = options.username;
+			password = options.password;
 			return this;
 		}
 

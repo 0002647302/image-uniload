@@ -65,7 +65,7 @@ final class LoadAndDisplayImageTask implements Runnable {
 	private final ImageSize targetSize;
 	private final DisplayImageOptions options;
 	private final ImageLoadingListener listener;
-	private final String useragent;
+	private final String userAgent;
 	private final String username;
 	private final String password;
 
@@ -82,7 +82,7 @@ final class LoadAndDisplayImageTask implements Runnable {
 		targetSize = imageLoadingInfo.targetSize;
 		options = imageLoadingInfo.options;
 		listener = imageLoadingInfo.listener;
-		useragent = options.useragent;
+		userAgent = options.userAgent;
 		username = options.username;
 		password = options.password;
 	}
@@ -299,7 +299,7 @@ final class LoadAndDisplayImageTask implements Runnable {
 
 		// If previous compression wasn't needed or failed
 		// Download and save original image
-		InputStream is = downloader.getStream(new URI(uri), useragent, username, password);
+		InputStream is = downloader.getStream(new URI(uri), userAgent, username, password);
 		try {
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile), BUFFER_SIZE);
 			try {
