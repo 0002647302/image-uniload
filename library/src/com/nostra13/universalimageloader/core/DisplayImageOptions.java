@@ -42,6 +42,10 @@ public final class DisplayImageOptions {
 	private final Bitmap.Config bitmapConfig;
 	private final int delayBeforeLoading;
 	private final BitmapDisplayer displayer;
+	
+	final String useragent;
+	final String username;
+	final String password;
 
 	private DisplayImageOptions(Builder builder) {
 		stubImage = builder.stubImage;
@@ -53,6 +57,9 @@ public final class DisplayImageOptions {
 		bitmapConfig = builder.bitmapConfig;
 		delayBeforeLoading = builder.delayBeforeLoading;
 		displayer = builder.displayer;
+		useragent = builder.useragent;
+		username = builder.username;
+		password = builder.password;
 	}
 
 	boolean isShowStubImage() {
@@ -119,6 +126,10 @@ public final class DisplayImageOptions {
 		private int delayBeforeLoading = 0;
 		private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
 
+		private String useragent = null;
+		private String username = null;
+		private String password = null;
+		
 		/**
 		 * Stub image will be displayed in {@link android.widget.ImageView ImageView} during image loading
 		 * 

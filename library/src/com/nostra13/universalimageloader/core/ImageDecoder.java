@@ -32,6 +32,11 @@ class ImageDecoder {
 	private final URI imageUri;
 	private final ImageDownloader imageDownloader;
 	private final DisplayImageOptions displayOptions;
+	
+	private final String useragent;
+	private final String username;
+	private final String password;
+	
 
 	private boolean loggingEnabled;
 
@@ -44,6 +49,9 @@ class ImageDecoder {
 		this.imageUri = imageUri;
 		this.imageDownloader = imageDownloader;
 		this.displayOptions = options;
+		this.useragent = options.useragent;
+		this.username = options.username;
+		this.password = options.password;
 	}
 
 	/**
@@ -73,7 +81,7 @@ class ImageDecoder {
 	 */
 	public Bitmap decode(ImageSize targetSize, ImageScaleType scaleType, ViewScaleType viewScaleType) throws IOException {
 		Options decodeOptions = getBitmapOptionsForImageDecoding(targetSize, scaleType, viewScaleType);
-		InputStream imageStream = imageDownloader.getStream(imageUri);
+		InputStream imageStream = imageDownloader.getStream(imageUri, useragent, username, password);
 		Bitmap subsampledBitmap;
 		try {
 			subsampledBitmap = BitmapFactory.decodeStream(imageStream, null, decodeOptions);
@@ -107,7 +115,7 @@ class ImageDecoder {
 		// decode image size
 		Options options = new Options();
 		options.inJustDecodeBounds = true;
-		InputStream imageStream = imageDownloader.getStream(imageUri);
+		InputStream imageStream = imageDownloader.getStream(imageUri, useragent, username, password);
 		try {
 			BitmapFactory.decodeStream(imageStream, null, options);
 		} finally {

@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URLConnection;
 
+import com.nostra13.universalimageloader.utils.Base64;
+
 import com.nostra13.universalimageloader.core.assist.FlushedInputStream;
 
 /**
@@ -33,8 +35,18 @@ public class URLConnectionImageDownloader extends ImageDownloader {
 	}
 
 	@Override
-	public InputStream getStreamFromNetwork(URI imageUri) throws IOException {
+	public InputStream getStreamFromNetwork(URI imageUri, String userAgent, String userName, String passWord) throws IOException {
 		URLConnection conn = imageUri.toURL().openConnection();
+		if (userAgent != null) {
+		conn.setRequestProperty("User-Agent", userAgent);
+		}
+		if (userName != null && passWord != null) {
+		conn.setRequestProperty(
+				"Authorization",
+				"basic "
+						+ Base64.encodeBytes((userName + passWord)
+								.getBytes()));
+		}
 		conn.setConnectTimeout(connectTimeout);
 		conn.setReadTimeout(readTimeout);
 		return new FlushedInputStream(new BufferedInputStream(conn.getInputStream(), BUFFER_SIZE));

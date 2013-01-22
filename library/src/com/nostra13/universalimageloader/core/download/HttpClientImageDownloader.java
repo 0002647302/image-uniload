@@ -10,6 +10,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 
+import com.nostra13.universalimageloader.utils.Base64;
+
 public class HttpClientImageDownloader extends ImageDownloader {
 
 	private HttpClient httpClient;
@@ -19,8 +21,18 @@ public class HttpClientImageDownloader extends ImageDownloader {
 	}
 
 	@Override
-	protected InputStream getStreamFromNetwork(URI imageUri) throws IOException {
+	protected InputStream getStreamFromNetwork(URI imageUri, String userAgent, String userName, String passWord) throws IOException {
 		HttpGet httpRequest = new HttpGet(imageUri.toString());
+		if (userAgent != null) {
+		httpRequest.setHeader("User-Agent", userAgent);
+		}
+		if (userName != null && passWord != null) {
+		httpRequest.setHeader(
+				"Authorization",
+				"basic "
+						+ Base64.encodeBytes((userName + passWord)
+								.getBytes()));
+		}
 		HttpResponse response = httpClient.execute(httpRequest);
 		HttpEntity entity = response.getEntity();
 		BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);

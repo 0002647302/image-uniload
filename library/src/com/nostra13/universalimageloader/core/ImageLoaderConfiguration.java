@@ -46,6 +46,7 @@ public final class ImageLoaderConfiguration {
 	final DisplayImageOptions defaultDisplayImageOptions;
 	final ThreadFactory displayImageThreadFactory;
 	final boolean loggingEnabled;
+	
 
 	private ImageLoaderConfiguration(final Builder builder) {
 		maxImageWidthForMemoryCache = builder.maxImageWidthForMemoryCache;

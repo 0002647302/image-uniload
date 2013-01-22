@@ -21,10 +21,10 @@ public abstract class ImageDownloader {
 	protected static final int BUFFER_SIZE = 8 * 1024; // 8 Kb
 
 	/** Retrieves {@link InputStream} of image by URI. Image can be located as in the network and on local file system. */
-	public InputStream getStream(URI imageUri) throws IOException {
+	public InputStream getStream(URI imageUri, String userAgent, String userName, String passWord) throws IOException {
 		String scheme = imageUri.getScheme();
 		if (PROTOCOL_HTTP.equals(scheme) || PROTOCOL_HTTPS.equals(scheme) || PROTOCOL_FTP.equals(scheme)) {
-			return getStreamFromNetwork(imageUri);
+			return getStreamFromNetwork(imageUri, userAgent, userName, passWord);
 		} else if (PROTOCOL_FILE.equals(scheme)) {
 			return getStreamFromFile(imageUri);
 		} else {
@@ -41,7 +41,7 @@ public abstract class ImageDownloader {
 	}
 
 	/** Retrieves {@link InputStream} of image by URI (image is located in the network) */
-	protected abstract InputStream getStreamFromNetwork(URI imageUri) throws IOException;
+	protected abstract InputStream getStreamFromNetwork(URI imageUri, String userAgent, String userName, String passWord) throws IOException;
 
 	/** Retrieves {@link InputStream} of image by URI (image is located on the local file system or SD card) */
 	protected InputStream getStreamFromFile(URI imageUri) throws IOException {
