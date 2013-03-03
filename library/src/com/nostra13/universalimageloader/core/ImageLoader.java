@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup.LayoutParams;
@@ -37,6 +38,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.deque.LIFOLinkedBlockingDeque;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.FakeBitmapDisplayer;
+import com.nostra13.universalimageloader.utils.Base64;
 import com.nostra13.universalimageloader.utils.L;
 
 /**
@@ -245,14 +247,7 @@ public class ImageLoader {
 				imageView.setImageDrawable(options.getStubBitmap());
 			} else if (options.isShowStubGraphic()) {
 				try {
-					URL updateURL = new URL(options.getStubGraphic());
-					URLConnection conn1 = updateURL.openConnection();
-					InputStream im = conn1.getInputStream();
-					BufferedInputStream bis = new BufferedInputStream(im, 512);
-					BitmapFactory.Options bounds = new BitmapFactory.Options();
-					Bitmap bm = BitmapFactory.decodeStream(bis, null, bounds);
-					BitmapDrawable bmd = new BitmapDrawable(bm);
-					imageView.setImageDrawable(bmd);
+					imageView.setImageDrawable(loadDrawable(options));
 				} catch (Exception e) {
 					if (options.isShowStubImage()) {
 						imageView.setImageResource(options.getStubImage());
@@ -280,6 +275,31 @@ public class ImageLoader {
 				imageLoadingExecutor.submit(displayImageTask);
 			}
 		}
+	}
+
+	public Drawable loadDrawable(DisplayImageOptions options) throws Exception {
+		URL updateURL = new URL(options.getStubGraphic());
+		URLConnection conn1 = updateURL.openConnection();
+		if (options.userAgent != null) {
+			conn1.setRequestProperty("User-Agent", options.userAgent);
+		}
+		String credentials = "";
+		if (options.username != null) {
+			credentials = credentials + options.username;
+		}
+		if (options.password != null) {
+			credentials = credentials + ":" + options.password;
+		}
+		if (!credentials.equals(":")) {
+			conn1.setRequestProperty("Authorization",
+					"basic " + Base64.encodeBytes(credentials.getBytes()));
+		}
+		InputStream im = conn1.getInputStream();
+		BufferedInputStream bis = new BufferedInputStream(im, 512);
+		BitmapFactory.Options bounds = new BitmapFactory.Options();
+		Bitmap bm = BitmapFactory.decodeStream(bis, null, bounds);
+		BitmapDrawable bitmapDrawable = new BitmapDrawable(bm);
+		return bitmapDrawable;
 	}
 
 	/**
