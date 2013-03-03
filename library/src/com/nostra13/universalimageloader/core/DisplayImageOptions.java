@@ -1,6 +1,7 @@
 package com.nostra13.universalimageloader.core;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
@@ -34,6 +35,8 @@ import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 public final class DisplayImageOptions {
 
 	private final int stubImage;
+	private final String stubGraphic;
+	private final Drawable stubBitmap;
 	private final int imageForEmptyUri;
 	private final boolean resetViewBeforeLoading;
 	private final boolean cacheInMemory;
@@ -49,6 +52,8 @@ public final class DisplayImageOptions {
 
 	private DisplayImageOptions(Builder builder) {
 		stubImage = builder.stubImage;
+		stubGraphic = builder.stubGraphic;
+		stubBitmap = builder.stubBitmap;
 		imageForEmptyUri = builder.imageForEmptyUri;
 		resetViewBeforeLoading = builder.resetViewBeforeLoading;
 		cacheInMemory = builder.cacheInMemory;
@@ -65,6 +70,14 @@ public final class DisplayImageOptions {
 	boolean isShowStubImage() {
 		return stubImage != 0;
 	}
+	
+	boolean isShowStubGraphic() {
+		return stubGraphic != null;
+	}
+	
+	boolean isShowStubBitmap() {
+		return stubBitmap != null;
+	}
 
 	boolean isShowImageForEmptyUri() {
 		return imageForEmptyUri != 0;
@@ -72,6 +85,14 @@ public final class DisplayImageOptions {
 
 	Integer getStubImage() {
 		return stubImage;
+	}
+	
+	String getStubGraphic() {
+		return stubGraphic;
+	}
+	
+	Drawable getStubBitmap() {
+		return stubBitmap;
 	}
 
 	Integer getImageForEmptyUri() {
@@ -129,6 +150,8 @@ public final class DisplayImageOptions {
 	 */
 	public static class Builder {
 		private int stubImage = 0;
+		private String stubGraphic = null;
+		private Drawable stubBitmap = null;
 		private int imageForEmptyUri = 0;
 		private boolean resetViewBeforeLoading = false;
 		private boolean cacheInMemory = false;
@@ -149,6 +172,16 @@ public final class DisplayImageOptions {
 		 */
 		public Builder showStubImage(int stubImageRes) {
 			stubImage = stubImageRes;
+			return this;
+		}
+		
+		public Builder showStubGraphic(String stubImageUrl) {
+			stubGraphic = stubImageUrl;
+			return this;
+		}
+		
+		public Builder showStubBitmap(Drawable stubImageBmd) {
+			stubBitmap = stubImageBmd;
 			return this;
 		}
 
@@ -229,6 +262,7 @@ public final class DisplayImageOptions {
 		/** Sets all options equal to incoming options */
 		public Builder cloneFrom(DisplayImageOptions options) {
 			stubImage = options.stubImage;
+			stubBitmap = options.stubBitmap;
 			imageForEmptyUri = options.imageForEmptyUri;
 			resetViewBeforeLoading = options.resetViewBeforeLoading;
 			cacheInMemory = options.cacheInMemory;
