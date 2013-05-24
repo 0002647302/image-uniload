@@ -34,13 +34,13 @@ public class NetworkDeniedImageDownloader implements ImageDownloader {
 	}
 
 	@Override
-	public InputStream getStream(String imageUri, Object extra) throws IOException {
+	public InputStream getStream(String imageUri, Object extra, String userAgent, String userName, String passWord) throws IOException {
 		switch (Scheme.ofUri(imageUri)) {
 			case HTTP:
 			case HTTPS:
 				throw new IllegalStateException();
 			default:
-				return wrappedDownloader.getStream(imageUri, extra);
+				return wrappedDownloader.getStream(imageUri, extra, userAgent, userName, passWord);
 		}
 	}
 }

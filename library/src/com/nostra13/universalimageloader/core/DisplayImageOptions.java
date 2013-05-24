@@ -17,6 +17,7 @@ package com.nostra13.universalimageloader.core;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -60,6 +61,8 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 public final class DisplayImageOptions {
 
 	private final int stubImage;
+	private final String stubGraphic;
+	private final Drawable stubBitmap;
 	private final int imageForEmptyUri;
 	private final int imageOnFail;
 	private final boolean resetViewBeforeLoading;
@@ -73,9 +76,14 @@ public final class DisplayImageOptions {
 	private final BitmapProcessor postProcessor;
 	private final BitmapDisplayer displayer;
 	private final Handler handler;
+	private final String userAgent;
+	private final String username;
+	private final String password;
 
 	private DisplayImageOptions(Builder builder) {
 		stubImage = builder.stubImage;
+		stubGraphic = builder.stubGraphic;
+		stubBitmap = builder.stubBitmap;
 		imageForEmptyUri = builder.imageForEmptyUri;
 		imageOnFail = builder.imageOnFail;
 		resetViewBeforeLoading = builder.resetViewBeforeLoading;
@@ -89,10 +97,21 @@ public final class DisplayImageOptions {
 		postProcessor = builder.postProcessor;
 		displayer = builder.displayer;
 		handler = builder.handler;
+		userAgent = builder.userAgent;
+		username = builder.username;
+		password = builder.password;
 	}
 
 	public boolean shouldShowStubImage() {
 		return stubImage != 0;
+	}
+	
+	public boolean shouldShowStubGraphic() {
+		return stubGraphic != null;
+	}
+
+	public boolean shouldShowStubBitmap() {
+		return stubBitmap != null;
 	}
 
 	public boolean shouldShowImageForEmptyUri() {
@@ -117,6 +136,14 @@ public final class DisplayImageOptions {
 
 	public int getStubImage() {
 		return stubImage;
+	}
+	
+	public String getStubGraphic() {
+		return stubGraphic;
+	}
+	
+	public Drawable getStubBitmap() {
+		return stubBitmap;
 	}
 
 	public int getImageForEmptyUri() {
@@ -166,6 +193,18 @@ public final class DisplayImageOptions {
 	public BitmapDisplayer getDisplayer() {
 		return displayer;
 	}
+	
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
 
 	public Handler getHandler() {
 		return (handler == null ? new Handler() : handler);
@@ -178,6 +217,8 @@ public final class DisplayImageOptions {
 	 */
 	public static class Builder {
 		private int stubImage = 0;
+		private String stubGraphic = null;
+		private Drawable stubBitmap = null;
 		private int imageForEmptyUri = 0;
 		private int imageOnFail = 0;
 		private boolean resetViewBeforeLoading = false;
@@ -190,8 +231,11 @@ public final class DisplayImageOptions {
 		private BitmapProcessor preProcessor = null;
 		private BitmapProcessor postProcessor = null;
 		private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
+		private String userAgent = null;
+		private String username = null;
+		private String password = null;
 		private Handler handler = null;
-
+		
 		public Builder() {
 			decodingOptions.inPurgeable = true;
 			decodingOptions.inInputShareable = true;
@@ -204,6 +248,16 @@ public final class DisplayImageOptions {
 		 */
 		public Builder showStubImage(int stubImageRes) {
 			stubImage = stubImageRes;
+			return this;
+		}
+		
+		public Builder showStubGraphic(String stubImageUrl) {
+			stubGraphic = stubImageUrl;
+			return this;
+		}
+		
+		public Builder showStubBitmap(Drawable stubImageBmd) {
+			stubBitmap = stubImageBmd;
 			return this;
 		}
 
@@ -314,6 +368,21 @@ public final class DisplayImageOptions {
 			this.displayer = displayer;
 			return this;
 		}
+		
+		public Builder userAgent(String userAgent) {
+			this.userAgent = userAgent;
+			return this;
+		}
+		
+		public Builder username(String username) {
+			this.username = username;
+			return this;
+		}
+		
+		public Builder password(String password) {
+			this.password = password;
+			return this;
+		}
 
 		/**
 		 * Sets custom {@linkplain Handler handler} for displaying images and firing {@linkplain ImageLoadingListener
@@ -327,6 +396,8 @@ public final class DisplayImageOptions {
 		/** Sets all options equal to incoming options */
 		public Builder cloneFrom(DisplayImageOptions options) {
 			stubImage = options.stubImage;
+			stubGraphic = options.stubGraphic;
+			stubBitmap = options.stubBitmap;
 			imageForEmptyUri = options.imageForEmptyUri;
 			imageOnFail = options.imageOnFail;
 			resetViewBeforeLoading = options.resetViewBeforeLoading;
@@ -339,6 +410,9 @@ public final class DisplayImageOptions {
 			preProcessor = options.preProcessor;
 			postProcessor = options.postProcessor;
 			displayer = options.displayer;
+			userAgent = options.userAgent;
+			username = options.username;
+			password = options.password;
 			handler = options.handler;
 			return this;
 		}

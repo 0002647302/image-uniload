@@ -15,7 +15,15 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -32,6 +40,7 @@ import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.FakeBitmapDisplayer;
+import com.nostra13.universalimageloader.utils.Base64;
 import com.nostra13.universalimageloader.utils.ImageSizeUtils;
 import com.nostra13.universalimageloader.utils.L;
 
@@ -220,7 +229,17 @@ public class ImageLoader {
 				listener.onLoadingComplete(uri, imageView, bmp);
 			}
 		} else {
-			if (options.shouldShowStubImage()) {
+			if (options.shouldShowStubBitmap()) {
+				imageView.setImageDrawable(options.getStubBitmap());
+			} else if (options.shouldShowStubGraphic()) {
+				try {
+					imageView.setImageDrawable(loadDrawable(options));
+				} catch (Exception e) {
+					if (options.shouldShowStubImage()) {
+						imageView.setImageResource(options.getStubImage());
+					}
+				}
+			} else if (options.shouldShowStubImage()) {
 				imageView.setImageResource(options.getStubImage());
 			} else {
 				if (options.isResetViewBeforeLoading()) {
@@ -232,6 +251,32 @@ public class ImageLoader {
 			LoadAndDisplayImageTask displayTask = new LoadAndDisplayImageTask(engine, imageLoadingInfo, options.getHandler());
 			engine.submit(displayTask);
 		}
+	}
+	
+	public Drawable loadDrawable(DisplayImageOptions options) throws Exception {
+		URL updateURL = new URL(options.getStubGraphic());
+		URLConnection conn1 = updateURL.openConnection();
+		if (options.getUserAgent() != null) {
+			conn1.setRequestProperty("User-Agent", options.getUserAgent());
+		}
+		String credentials = "";
+		if (options.getUsername() != null) {
+			credentials = credentials + options.getUsername();
+		}
+		if (options.getPassword() != null) {
+			credentials = credentials + ":" + options.getPassword();
+		}
+		if (!credentials.equals(":")) {
+			conn1.setRequestProperty("Authorization",
+					"basic " + Base64.encodeBytes(credentials.getBytes()));
+		}
+		InputStream im = conn1.getInputStream();
+		BufferedInputStream bis = new BufferedInputStream(im, 512);
+		BitmapFactory.Options bounds = new BitmapFactory.Options();
+		Bitmap bm = BitmapFactory.decodeStream(bis, null, bounds);
+		@SuppressWarnings("deprecation")
+		BitmapDrawable bitmapDrawable = new BitmapDrawable(bm);
+		return bitmapDrawable;
 	}
 
 	/**

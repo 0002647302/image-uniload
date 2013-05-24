@@ -43,6 +43,10 @@ public class ImageDecodingInfo {
 
 	private final ImageDownloader downloader;
 	private final Object extraForDownloader;
+	
+	private final String userAgent;
+	private final String username;
+	private final String password;
 
 	private final Options decodingOptions;
 
@@ -56,6 +60,10 @@ public class ImageDecodingInfo {
 
 		this.downloader = downloader;
 		this.extraForDownloader = displayOptions.getExtraForDownloader();
+		
+		this.userAgent = displayOptions.getUserAgent();
+		this.username = displayOptions.getUsername();
+		this.password = displayOptions.getPassword();
 
 		decodingOptions = new Options();
 		copyOptions(displayOptions.getDecodingOptions(), decodingOptions);
@@ -137,6 +145,18 @@ public class ImageDecodingInfo {
 	 */
 	public Object getExtraForDownloader() {
 		return extraForDownloader;
+	}
+
+	public String getUserAgent() {
+		return userAgent;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 	/**

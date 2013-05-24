@@ -338,7 +338,7 @@ final class LoadAndDisplayImageTask implements Runnable {
 	}
 
 	private void downloadImage(File targetFile) throws IOException {
-		InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader());
+		InputStream is = getDownloader().getStream(uri, options.getExtraForDownloader(), options.getUserAgent(), options.getUsername(), options.getPassword());
 		try {
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile), BUFFER_SIZE);
 			try {
@@ -389,3 +389,4 @@ final class LoadAndDisplayImageTask implements Runnable {
 		if (loggingEnabled) L.i(message, args);
 	}
 }
+

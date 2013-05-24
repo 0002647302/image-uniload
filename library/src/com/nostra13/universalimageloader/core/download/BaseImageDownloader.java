@@ -34,6 +34,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.utils.Base64;
 
 /**
  * Provides retrieving of {@link InputStream} of image by URI from network or file system or app resources.<br />
@@ -77,11 +78,11 @@ public class BaseImageDownloader implements ImageDownloader {
 	}
 
 	@Override
-	public InputStream getStream(String imageUri, Object extra) throws IOException {
+	public InputStream getStream(String imageUri, Object extra, String userAgent, String userName, String passWord) throws IOException {
 		switch (Scheme.ofUri(imageUri)) {
 			case HTTP:
 			case HTTPS:
-				return getStreamFromNetwork(imageUri, extra);
+				return getStreamFromNetwork(imageUri, extra, userAgent, userName, passWord);
 			case FILE:
 				return getStreamFromFile(imageUri, extra);
 			case CONTENT:
@@ -106,9 +107,14 @@ public class BaseImageDownloader implements ImageDownloader {
 	 * @throws IOException if some I/O error occurs during network request or if no InputStream could be created for
 	 *             URI.
 	 */
-	protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+	protected InputStream getStreamFromNetwork(String imageUri, Object extra, String userAgent, String userName, String passWord) throws IOException {
 		HttpURLConnection conn = connectTo(imageUri);
-
+		if (userAgent != null) {
+			conn.setRequestProperty("User-Agent", userAgent);
+		}
+		if (userName != null && passWord != null) {
+			conn.setRequestProperty("Authorization", "basic " + Base64.encodeBytes((userName + ":" + passWord).getBytes()));
+		}
 		int redirectCount = 0;
 		while (conn.getResponseCode() / 100 == 3 && redirectCount < MAX_REDIRECT_COUNT) {
 			conn = connectTo(conn.getHeaderField("Location"));

@@ -26,6 +26,8 @@ import org.apache.http.entity.BufferedHttpEntity;
 
 import android.content.Context;
 
+import com.nostra13.universalimageloader.utils.Base64;
+
 /**
  * Implementation of ImageDownloader which uses {@link HttpClient} for image stream retrieving.
  * 
@@ -42,8 +44,14 @@ public class HttpClientImageDownloader extends BaseImageDownloader {
 	}
 
 	@Override
-	protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+	protected InputStream getStreamFromNetwork(String imageUri, Object extra, String userAgent, String userName, String passWord) throws IOException {
 		HttpGet httpRequest = new HttpGet(imageUri);
+		if (userAgent != null) {
+			httpRequest.setHeader("User-Agent", userAgent);
+		}
+		if (userName != null && passWord != null) {
+			httpRequest.setHeader("Authorization", "basic " + Base64.encodeBytes((userName + ":" + passWord).getBytes()));
+		}
 		HttpResponse response = httpClient.execute(httpRequest);
 		HttpEntity entity = response.getEntity();
 		BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
