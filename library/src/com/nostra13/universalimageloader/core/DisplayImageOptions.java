@@ -62,7 +62,7 @@ public final class DisplayImageOptions {
 
 	private final int stubImage;
 	private final String stubGraphic;
-	private final Drawable stubBitmap;
+	private final Bitmap stubBitmap;
 	private final int imageForEmptyUri;
 	private final int imageOnFail;
 	private final boolean resetViewBeforeLoading;
@@ -142,7 +142,7 @@ public final class DisplayImageOptions {
 		return stubGraphic;
 	}
 	
-	public Drawable getStubBitmap() {
+	public Bitmap getStubBitmap() {
 		return stubBitmap;
 	}
 
@@ -218,7 +218,7 @@ public final class DisplayImageOptions {
 	public static class Builder {
 		private int stubImage = 0;
 		private String stubGraphic = null;
-		private Drawable stubBitmap = null;
+		private Bitmap stubBitmap = null;
 		private int imageForEmptyUri = 0;
 		private int imageOnFail = 0;
 		private boolean resetViewBeforeLoading = false;
@@ -256,7 +256,7 @@ public final class DisplayImageOptions {
 			return this;
 		}
 		
-		public Builder showStubBitmap(Drawable stubImageBmd) {
+		public Builder showStubBitmap(Bitmap stubImageBmd) {
 			stubBitmap = stubImageBmd;
 			return this;
 		}

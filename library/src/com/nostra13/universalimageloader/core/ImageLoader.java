@@ -230,7 +230,7 @@ public class ImageLoader {
 			}
 		} else {
 			if (options.shouldShowStubBitmap()) {
-				imageView.setImageDrawable(options.getStubBitmap());
+				imageView.setImageBitmap(options.getStubBitmap());
 			} else if (options.shouldShowStubGraphic()) {
 				try {
 					imageView.setImageDrawable(loadDrawable(options));
