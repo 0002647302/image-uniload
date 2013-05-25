@@ -369,17 +369,17 @@ public final class DisplayImageOptions {
 			return this;
 		}
 		
-		public Builder userAgent(String userAgent) {
+		public Builder setUserAgent(String userAgent) {
 			this.userAgent = userAgent;
 			return this;
 		}
 		
-		public Builder username(String username) {
+		public Builder setUsername(String username) {
 			this.username = username;
 			return this;
 		}
 		
-		public Builder password(String password) {
+		public Builder setPassword(String password) {
 			this.password = password;
 			return this;
 		}

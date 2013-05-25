@@ -108,25 +108,25 @@ public class BaseImageDownloader implements ImageDownloader {
 	 *             URI.
 	 */
 	protected InputStream getStreamFromNetwork(String imageUri, Object extra, String userAgent, String userName, String passWord) throws IOException {
-		HttpURLConnection conn = connectTo(imageUri);
-		if (userAgent != null) {
-			conn.setRequestProperty("User-Agent", userAgent);
-		}
-		if (userName != null && passWord != null) {
-			conn.setRequestProperty("Authorization", "basic " + Base64.encodeBytes((userName + ":" + passWord).getBytes()));
-		}
+		HttpURLConnection conn = connectTo(imageUri, userAgent, userName, passWord);
 		int redirectCount = 0;
 		while (conn.getResponseCode() / 100 == 3 && redirectCount < MAX_REDIRECT_COUNT) {
-			conn = connectTo(conn.getHeaderField("Location"));
+			conn = connectTo(conn.getHeaderField("Location"), userAgent, userName, passWord);
 			redirectCount++;
 		}
 
 		return new BufferedInputStream(conn.getInputStream(), BUFFER_SIZE);
 	}
 
-	private HttpURLConnection connectTo(String url) throws IOException {
+	private HttpURLConnection connectTo(String url, String userAgent, String userName, String passWord) throws IOException {
 		String encodedUrl = Uri.encode(url, ALLOWED_URI_CHARS);
 		HttpURLConnection conn = (HttpURLConnection) new URL(encodedUrl).openConnection();
+		if (userAgent != null) {
+			conn.setRequestProperty("User-Agent", userAgent);
+		}
+		if (userName != null && passWord != null) {
+			conn.setRequestProperty("Authorization", "basic " + Base64.encodeBytes((userName + ":" + passWord).getBytes()));
+		}
 		conn.setConnectTimeout(connectTimeout);
 		conn.setReadTimeout(readTimeout);
 		conn.connect();
