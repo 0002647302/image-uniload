@@ -17,7 +17,6 @@ package com.nostra13.universalimageloader.core;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.widget.ImageView;
 
